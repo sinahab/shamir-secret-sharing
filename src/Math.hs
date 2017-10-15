@@ -21,4 +21,3 @@ extendedEuclid a b = (gcd, y - (b `div` a) * x, x)
 modMultInverse :: Integer -> Integer -> Integer
 modMultInverse a p = get2nd $ extendedEuclid a p
   where get2nd (_,x,_) = x
-

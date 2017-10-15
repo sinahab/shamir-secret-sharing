@@ -1,21 +1,28 @@
+
 module Polynomial
-  ( constructPolynomial,
+  ( Term (..),
+    Polynomial (..),
+    constructPolynomial,
     evaluatePolynomial
   ) where
 
-data Coeff = Coeff {degree :: Int, value :: Int} deriving (Show)
+data Polynomial = Polynomial {order :: Int, terms :: [Term]} deriving (Show, Eq)
+data Term = Term {degree :: Int, coeff :: Integer} deriving (Show, Eq)
 
--- @param [Int] list of integer coefficients. The index of each determines which term it's a coefficient of.
--- @return [Coeff] list of Coeff defining the polynomial
-constructPolynomial :: [Int] -> [Coeff]
-constructPolynomial coefficients = [(Coeff d (coefficients !! d)) | d <- [0..(degree - 1)]]
-  where degree = length coefficients
+-- |Constructs a polynomial using the provided values as coefficients,
+-- with the coefficient's index taken as the order of term it applies to. 
+-- @param [Integer]: a list of coefficients.
+-- @return Polynomial: a polynomial.
+constructPolynomial :: [Integer] -> Polynomial
+constructPolynomial coefficients = Polynomial order terms
+  where terms = [(Term degree (coefficients !! degree)) | degree <- [0..order]]
+        order = (length coefficients) - 1
 
--- Evaluate polynomial at value x.
--- @param Int x where to evaluate the polynomial.
--- @param [Coeff] list of coefficients representing the polynomial.
--- @return Int the value of the polynomial at the desired point.
-evaluatePolynomial :: Int -> [Coeff] -> Int
-evaluatePolynomial x [] = 0
-evaluatePolynomial x (c:cs) = (value c) * x ^ (degree c) + evaluatePolynomial x cs
-
+-- |Evaluate a polynomial at point x.
+-- @param Integer: the point at which to evaluate the polynomial.
+-- @param Polynomial: the polynomial to evaluate.
+-- @return Integer: the value of the polynomial at the desired point.
+evaluatePolynomial :: Integer -> Polynomial -> Integer
+evaluatePolynomial x polynomial = evaluateSum x $ terms polynomial
+  where evaluateSum x [] = 0
+        evaluateSum x (t:ts) = (coeff t) * x ^ (degree t) + evaluateSum x ts
