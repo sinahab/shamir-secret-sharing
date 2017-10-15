@@ -23,3 +23,5 @@ To start REPL:
 ```
 stack ghci
 ```
+## Future work:
+* `Math.hs` `modMultInverse`: explicitely check that provided numbers are co-prime before running calculation.

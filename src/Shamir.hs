@@ -25,4 +25,3 @@ combineShares :: (Fractional a) => [Share] -> a
 combineShares shares = sum [fromIntegral (y s1) * product [fromIntegral (x s2) / fromIntegral (x s2 - x s1) | s2 <- shares, s1 /= s2] | s1 <- shares]
 -- alternative: 
 -- combineShares shares = foldl (+) 0 [fromIntegral (y s1) * product [fromIntegral (x s2) / fromIntegral (x s2 - x s1) | s2 <- shares, s1 /= s2] | s1 <- shares]
-
