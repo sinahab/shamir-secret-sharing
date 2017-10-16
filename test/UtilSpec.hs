@@ -1,7 +1,6 @@
 module UtilSpec (main, spec) where
 
 import Test.Hspec
-import Control.Exception (evaluate)
 
 import Util (combinations)
 

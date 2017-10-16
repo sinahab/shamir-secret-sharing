@@ -1,8 +1,6 @@
 module MathSpec (main, spec) where
 
 import Test.Hspec
-import Test.QuickCheck
-import Control.Exception (evaluate)
 
 import Math (extendedEuclid, modMultInverse)
 

@@ -1,7 +1,6 @@
 module ShamirSpec (main, spec) where
 
 import Test.Hspec
-import Control.Exception (evaluate)
 
 import Shamir (createShares, combineShares, Share (..))
 import Util (combinations)

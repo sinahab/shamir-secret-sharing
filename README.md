@@ -1,27 +1,36 @@
 
-# Shamir Secret Sharing in Haskell
+# Shamir Secret Sharing
 
+This project implements the [Shamir secret sharing algorithm](https://en.wikipedia.org/wiki/Shamir%27s_Secret_Sharing) in Haskell.
 
-##  TODO:
-* Maybe create a Polynomial type, which is a list of Coeff, but also enforces that there is at most one Coeff with each deg.
-* Make modifications to do stuff in finite-field. -> I.e. need GCD etc.
-* Write tests.
-* Allow user to input a string as a secret, and encode/decode to Int for processing.
-* Create a nice UX for creating & combining shares.
-* Use Crypto.Random or something for secure RNG.
-* Maybe: change combineShares into an iterative combiner thing?
-* Change LICENSE to MIT.
+Specifically, [`test/ShamirSpec.hs`](https://github.com/sinahab/shamir-secret-sharing/blob/master/test/ShamirSpec.hs) demonstrates the secret recovery process by testing every possible combination of shares in a 3-out-of-6 threshold scheme.
 
-## Note to self:
+## Architecture
 
-To run tests:
-```
-stack test
-```
+The code is modular and [fully-tested](https://github.com/sinahab/shamir-secret-sharing/tree/master/test). The general structure is:
 
-To start REPL:
-```
-stack ghci
-```
-## Future work:
-* `Math.hs` `modMultInverse`: explicitely check that provided numbers are co-prime before running calculation.
+* [`src/Shamir.hs`](https://github.com/sinahab/shamir-secret-sharing/blob/master/src/Shamir.hs): provides the core API for shamir secret sharing.
+  * `createShares`: divides a secret into shares, using a k-out-of-n threshold scheme with finite field arithmetic.
+  * `combineShares`: combines shares to recover a secret, by using Lagrange interpolation.
+
+* [`src/Polynomial.hs`](https://github.com/sinahab/shamir-secret-sharing/blob/master/src/Polynomial.hs): provides an interface for working with polynomials.
+  * `constructPolynomial`: constructs a polynomial from a list of coefficients.
+  * `evaluatePolynomial`: evaluates a polynomial at point x.
+
+* [`src/Math.hs`](https://github.com/sinahab/shamir-secret-sharing/blob/master/src/Math.hs): implements Mathematical functions.
+  * `extendedEuclid`: calculates the GCD and coeffcients of Bézout's identity for a and b s.t.: ax + by = gcd(a,b).
+  * `modMultInverse`: calculates the multiplicative inverse of a s.t.: a * b = 1 mod p
+
+* [`src/Util.hs`](https://github.com/sinahab/shamir-secret-sharing/blob/master/src/Util.hs): implements utility functions.
+  * `combination`: returns all possible combinations of n elements from a list.
+
+## Development
+
+To run tests: `stack test`
+
+To start the REPL: `stack ghci`
+
+## Resources
+
+* Shamir, Adi. [“How to Share a Secret.”](https://pdfs.semanticscholar.org/3144/5e3bd3672ed743c4a089cc0db4f23357f0f2.pdf) Commun. ACM 22 (1979): 612-613.
+* Boneh, Dan, and Victor Shoup. [Principles of Modern Cryptography](https://crypto.stanford.edu/~dabo/cryptobook/draft_0_3.pdf). Vol. 0.3, 2016. 443-450.
